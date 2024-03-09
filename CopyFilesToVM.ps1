@@ -6,7 +6,7 @@
     DiskLayout                      = "UEFI"
     SizeBytes                       = 500GB
     MemoryAmount                    = 16GB
-    CPUCores                        = 4
+    CPUCores                        = 6
     NetworkSwitch                   = "Default Switch"
     VHDPath                         = "C:\Users\Public\Documents\Hyper-V\Virtual Hard Disks\"
     UnattendPath                    = "$PSScriptRoot" + "\autounattend.xml"
