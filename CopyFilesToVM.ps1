@@ -28,7 +28,7 @@ Function Dismount-ISO {
     param (
         [string]$SourcePath
     )
-    $disk = Get-Volume | Where-Object { $_.DriveType -eq "CD-ROM" } | select *
+    $disk = Get-Volume | Where-Object { $_.DriveType -eq "CD-ROM" } | Select-Object *
     Foreach ($d in $disk) {
         Dismount-DiskImage -ImagePath $sourcePath | Out-Null
     }
@@ -45,7 +45,7 @@ Function Mount-ISOReliable {
             Function Get-NewDriveLetter {
                 $UsedDriveLetters = ((Get-Volume).DriveLetter) -join ""
                 Do {
-                    $DriveLetter = (65..90) | Get-Random | % { [char]$_ }
+                    $DriveLetter = (65..90) | Get-Random | ForEach-Object { [char]$_ }
                 }
                 Until (!$UsedDriveLetters.Contains("$DriveLetter"))
                 $DriveLetter
@@ -1096,10 +1096,10 @@ You can use the fields below to configure the VHD or VHDX that you want to creat
         try {
             # Create log folder
             if (Test-Path $logFolder) {
-                $null = rd $logFolder -Force -Recurse
+                $null = Remove-Item $logFolder -Force -Recurse
             }
 
-            $null = md $logFolder -Force
+            $null = mkdir $logFolder -Force
 
             # Try to start transcripting.  If it's already running, we'll get an exception and swallow it.
             try {
@@ -1272,7 +1272,7 @@ You can use the fields below to configure the VHD or VHDX that you want to creat
                                 return
                             }
                             else {
-                                $tempOpenWim.Images | % { $cmbSkuList.Items.Add($_.ImageFlags) }
+                                $tempOpenWim.Images | ForEach-Object { $cmbSkuList.Items.Add($_.ImageFlags) }
                                 $cmbSkuList.SelectedIndex = 0
                             }
 
@@ -1922,7 +1922,7 @@ You can use the fields below to configure the VHD or VHDX that you want to creat
             if ($null -eq $openImage) {
                 Write-W2VError "The specified edition does not appear to exist in the specified WIM."
                 Write-W2VError "Valid edition names are:"
-                $openWim.Images | % { Write-W2VError "  $($_.ImageFlags)" }
+                $openWim.Images | ForEach-Object { Write-W2VError "  $($_.ImageFlags)" }
                 throw
             }
 
@@ -4126,7 +4126,7 @@ function Assign-VMGPUPartitionAdapter {
         Add-VMGpuPartitionAdapter -VMName $VMName
     }
     else {
-        $DeviceID = ((Get-WmiObject Win32_PNPSignedDriver | where { ($_.Devicename -eq "$GPUNAME") }).hardwareid).split('\')[1]
+        $DeviceID = ((Get-WmiObject Win32_PNPSignedDriver | Where-Object { ($_.Devicename -eq "$GPUNAME") }).hardwareid).split('\')[1]
         $DevicePathName = ($PartitionableGPUList | Where-Object name -like "*$deviceid*").Name
         Add-VMGpuPartitionAdapter -VMName $VMName -InstancePath $DevicePathName
     }

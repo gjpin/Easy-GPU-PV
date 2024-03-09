@@ -1,7 +1,5 @@
-# Easy-GPU-PV
+# Easy-GPU-PV without Parsec
 A work-in-progress project dedicated to making GPU Paravirtualization on Windows Hyper-V easier!
-
-Version without Parsec.
 
 GPU-PV allows you to partition your systems dedicated or integrated GPU and assign it to several Hyper-V VMs.  It's the same technology that is used in WSL2, and Windows Sandbox.  
 

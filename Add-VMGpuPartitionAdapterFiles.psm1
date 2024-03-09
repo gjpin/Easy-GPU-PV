@@ -24,7 +24,7 @@
 
     Write-Host "INFO   : Finding and copying driver files for $GPUName to VM. This could take a while..."
 
-    $Drivers = Get-WmiObject Win32_PNPSignedDriver | where { $_.DeviceName -eq "$GPUName" }
+    $Drivers = Get-WmiObject Win32_PNPSignedDriver | Where-Object { $_.DeviceName -eq "$GPUName" }
 
     New-Item -ItemType Directory -Path "$DriveLetter\windows\system32\HostDriverStore" -Force | Out-Null
 
@@ -43,7 +43,7 @@
         $DriverFiles = @()
         $ModifiedDeviceID = $d.DeviceID -replace "\\", "\\"
         $Antecedent = "\\" + $hostname + "\ROOT\cimv2:Win32_PNPSignedDriver.DeviceID=""$ModifiedDeviceID"""
-        $DriverFiles += Get-WmiObject Win32_PNPSignedDriverCIMDataFile | where { $_.Antecedent -eq $Antecedent }
+        $DriverFiles += Get-WmiObject Win32_PNPSignedDriverCIMDataFile | Where-Object { $_.Antecedent -eq $Antecedent }
         $DriverName = $d.DeviceName
         $DriverID = $d.DeviceID
         if ($DriverName -like "NVIDIA*") {
